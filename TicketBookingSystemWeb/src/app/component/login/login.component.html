@@ -1,0 +1,68 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-12 col-lg-11 col-xl-10">
+            <div class="card d-flex mx-auto my-5">
+                <div class="row">
+                    <!-- Left Section -->
+                    <div class="col-md-5 col-sm-12 col-xs-12 c1 p-5">
+                        <div class="row mb-5 m-3"> </div>
+                        <img src="https://i.imgur.com/kdE7GKw.jpg" width="120vw" height="210vh" class="mx-auto d-flex" alt="Teacher">
+                        <div class="row justify-content-center">
+                            <div class="w-75 mx-md-5 mx-1 mx-sm-2 mb-5 mt-4 px-sm-5 px-md-2 px-xl-1 px-2">
+                                <h1 class="wlcm">Welcome to Ticket Booking</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section -->
+                    <div class="col-md-7 col-sm-12 col-xs-12 c2 px-5 pt-5">
+                        <!-- Customer/Staff Toggle -->
+                        <div class="row justify-content-end mb-4">
+                            <div class="col-auto">
+                                <span 
+                                    class="role-toggle" 
+                                    [class.active]="selectedRole === 'Customer'" 
+                                    (click)="selectRole('Customer')">
+                                    Customer
+                                </span>
+                                <span 
+                                    class="role-toggle ml-3" 
+                                    [class.active]="selectedRole === 'Staff'" 
+                                    (click)="selectRole('Staff')">
+                                    Staff
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Dynamic Login Form -->
+                        <form name="myform" class="px-5 pb-5" #loginform="ngForm" (ngSubmit)="login()">
+                            <div class="d-flex">
+                                <h3 class="font-weight-bold">{{ selectedRole }} Login</h3>
+                            </div>
+                            <small class="text-danger">{{ msg }}</small>
+                            <div class="form-group">
+                                <input class="form-control" type="email" name="email" placeholder="Enter email" [(ngModel)]="customer.email" required
+                                    #email="ngModel" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" [class.is-invalid]="email.touched && email.invalid" />
+                                <small class="text-danger" *ngIf="email.touched && email.invalid">Enter a valid email.</small>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Enter password" [(ngModel)]="customer.password"
+                                    #password="ngModel" required [class.is-invalid]="password.touched && password.invalid">
+                                <small class="text-danger" *ngIf="password.touched && password.invalid">Password is required.</small>
+                            </div>
+                            <button [disabled]="loginform.form.invalid" class="text-white text-weight-bold bt">Continue</button>
+                            
+                            <small class="ac" (click)="goToRegistration()">
+                                <h5  id="register" >Register</h5>
+                              </small>
+                              
+                              <small class="ac" (click)="goToconfigerPage()">
+                                <p>Configeration page</p>
+                              </small>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

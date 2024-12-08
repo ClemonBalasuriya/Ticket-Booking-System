@@ -21,5 +21,4 @@ public class Vendor {
     private String password;
     private String email;
     private String phone;
-    private int releaseRate;    // Represents tickets released per interval
 }
