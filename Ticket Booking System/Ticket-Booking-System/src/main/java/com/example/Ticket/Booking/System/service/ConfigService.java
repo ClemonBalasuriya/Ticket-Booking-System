@@ -2,6 +2,8 @@ package com.example.Ticket.Booking.System.service;
 
 import com.example.Ticket.Booking.System.model.Configuration;
 import com.example.Ticket.Booking.System.repository.ConfigRepository;
+import com.example.Ticket.Booking.System.repository.CustomerRegistrationRepository;
+import com.example.Ticket.Booking.System.repository.TicketPoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,10 @@ public class ConfigService {
 
     @Autowired
     private ConfigRepository configRepository;
+
+    @Autowired
+    private TicketPoolRepository ticketPoolRepository;
+
 
     // Method to update configuration values by ID
     public Configuration updateTicketConfig(int maxTickets, int customerRetrievalRate, int vendorReleaseRate) {
@@ -47,5 +53,14 @@ public class ConfigService {
     // read the Vendor_release_rate
     public int getVendor_release_rate() {
         return configRepository.findById(1).map(Configuration::getVendor_release_rate).orElse(0);
+    }
+
+    //update availableConfigTable
+    public int updateAvailableTickets(){
+        long count = ticketPoolRepository.countNullCustomer();
+        configRepository.findById(1).orElseThrow().setTicketsAvailable((int)count);
+        return (int)count;
+
+
     }
 }

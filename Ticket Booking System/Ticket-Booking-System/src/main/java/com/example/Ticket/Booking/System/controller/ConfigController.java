@@ -17,6 +17,7 @@ public class ConfigController {
     @GetMapping("")
     @CrossOrigin(origins = "http://localhost:4200")
     public Configuration getTicketsSummary() {
+        configurationService.updateAvailableTickets();
 
         int totalTickets = configurationService.getTotalTickets();
         int totalTicketsReleased = configurationService.getTotalReleaseTickets();
@@ -29,7 +30,7 @@ public class ConfigController {
     @PostMapping("/changeconfig")
     @CrossOrigin(origins = "http://localhost:4200")
     public Configuration changeConfig(@RequestBody Configuration configuration) throws Exception {
-        System.out.println(configuration.getTotalTickets());
+        configurationService.updateAvailableTickets();
         return configurationService.updateTicketConfig(configuration.getTotalTickets(),configuration.getCustomer_retrieval_rate(),configuration.getVendor_release_rate());
 
     }

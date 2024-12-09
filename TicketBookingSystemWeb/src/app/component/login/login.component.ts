@@ -13,10 +13,15 @@ import { NgIf } from '@angular/common';
 })
 export class LoginComponent {
   customer = new Customer();
+
   msg = '';
   selectedRole: 'Customer' | 'Staff' = 'Customer'; // Default to Customer
 
+  
+
   constructor(private _service: LoginService, private _router: Router) {}
+
+
 
   // Login method
   login() {
@@ -24,6 +29,8 @@ export class LoginComponent {
       this._service.loginCustomerFromRemort(this.customer).subscribe(
         response => {
           console.log('Customer logged in successfully:');
+          // Store customer info in the service
+          this._service.setCustomerInfo(this.customer);
           this._router.navigate(['ticketbooking']);
         },
         error => {
@@ -37,7 +44,8 @@ export class LoginComponent {
       this._service.loginVendorFromRemort(this.customer).subscribe(
         response => {
           console.log('Vendor logged in successfully:');
-          this._router.navigate(['ticketpurchasing']);
+          
+          this._router.navigate(['ticketrelease']);
         },
         error => {
           this.msg = 'Enter the valid email id and password.';

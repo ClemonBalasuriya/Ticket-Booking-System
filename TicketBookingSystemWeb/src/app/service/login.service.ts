@@ -10,6 +10,15 @@ export class LoginService {
 
   constructor(private _http:HttpClient) { }
 
+  private customerInfo: any;
+  setCustomerInfo(customer: any) {
+    this.customerInfo = customer;
+  }
+
+  getCustomerInfo() {
+    return this.customerInfo;
+  }
+
   public loginCustomerFromRemort(customer: Customer):Observable<any>{
     return this._http.post<any>("http://localhost:8080/customerlogin", customer);
   }

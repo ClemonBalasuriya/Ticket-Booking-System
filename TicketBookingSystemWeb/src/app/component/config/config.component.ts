@@ -28,11 +28,7 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTicketSummary();
-    this.config.totalTickets=this.totTickets;
-    this.config.ticketsReleased=this.ticketsReleased;
-    this.config.ticketsAvailable=this.ticketsAvailable;
-    this.config.customer_retrieval_rate=this.customer_retrieval_rate;
-    this.config.vendor_release_rate=this.vendor_release_rate;
+    
 
 
   }
@@ -46,6 +42,13 @@ export class ConfigComponent implements OnInit {
         this.customer_retrieval_rate = data.customer_retrieval_rate;
         this.vendor_release_rate = data.vendor_release_rate;
 
+        this.config.totalTickets=this.totTickets;
+        this.config.ticketsReleased=this.ticketsReleased;
+        this.config.ticketsAvailable=this.ticketsAvailable;
+        this.config.customer_retrieval_rate=this.customer_retrieval_rate;
+        this.config.vendor_release_rate=this.vendor_release_rate;
+
+
       },
       (error ) => console.error("Error in Ticket Summary",error)
     );
@@ -56,6 +59,8 @@ export class ConfigComponent implements OnInit {
     if(this.ticketsReleased>this.config.totalTickets){
       alert("Total Ticket should be more than Release Count!")
       this.config.totalTickets = this.totTickets;
+      this.config.customer_retrieval_rate = this.customer_retrieval_rate;
+      this.config.vendor_release_rate = this.vendor_release_rate;
       return;
     }
     if (this.validateInputs()) {
@@ -65,6 +70,7 @@ export class ConfigComponent implements OnInit {
 
       this.configServise.changeConfig(this.config).subscribe(
         response =>{
+
           console.log('Config change');
         },
         error=>{

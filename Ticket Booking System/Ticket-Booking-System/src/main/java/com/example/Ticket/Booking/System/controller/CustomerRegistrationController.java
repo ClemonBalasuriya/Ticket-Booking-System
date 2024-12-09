@@ -5,6 +5,8 @@ import com.example.Ticket.Booking.System.service.CustomerRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 public class CustomerRegistrationController {
 
@@ -16,7 +18,8 @@ public class CustomerRegistrationController {
     public Customer registerCustomer(@RequestBody Customer customer) throws Exception {
         String tempEmail = customer.getEmail();
         if (tempEmail != null && !"".equals(tempEmail)  ) {
-            Customer customerObj = customerRegistrationService.fetchCustomerByEmail(tempEmail);
+            Optional<Customer> customerOb = customerRegistrationService.fetchCustomerByEmail(tempEmail);
+            Customer customerObj = customerOb.get();
             if (customerObj != null) {
                 throw new Exception("Customer with"+tempEmail+"is already exist.");
             }

@@ -29,6 +29,6 @@ public class TicketPool {
     private Vendor issuer;
 
     @ManyToOne // Indicates a many-to-one relationship
-    @JoinColumn(name = "customer_id", nullable = false) // Specifies the foreign key column
+    @JoinColumn(name = "customer_id") // Specifies the foreign key column
     private Customer customer;
 }

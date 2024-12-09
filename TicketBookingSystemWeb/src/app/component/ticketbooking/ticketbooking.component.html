@@ -1,1 +1,53 @@
-<p>ticketbooking works!</p>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-12 col-lg-11 col-xl-10">
+            <div class="card d-flex mx-auto my-5">
+                <div class="row">
+                    <!-- Left Section -->
+                    <div class="col-md-5 col-sm-12 col-xs-12 c1 p-5">
+                        <div class="row mb-5 m-3"></div>
+                        <img id="ticket" src="https://th.bing.com/th/id/OIP.6yyL6MlxIV4izkwnpn8DHwHaE8?rs=1&pid=ImgDetMain" width="150vw" height="200vh" class="mx-auto d-flex" alt="Ticket Image">
+                        <div class="row justify-content-center">
+                            <div class="w-75 mx-md-5 mx-1 mx-sm-2 mb-5 mt-4 px-sm-5 px-md-2 px-xl-1 px-20">
+                                <h1 class="wlcm">DJ Night.....</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section -->
+                    <div class="col-md-7 col-sm-12 col-xs-12 c2 px-5 pt-5">
+                        <!-- Ticket Details -->
+                        <div class="row mb-4">
+                            <div class="col-auto">
+                                <h3 class="font-weight-bold">Ticket Details</h3>
+                                <p><strong>Available Tickets:</strong> {{ticketsAvailable}}</p>
+                                <p><strong>Retrieval Rate:</strong> {{retrivalRate}}</p>
+                            </div>
+                        </div>
+                        <!-- Ticket Purchase Form -->
+                        <form name="ticketForm" class="px-5 pb-5" #ticketForm="ngForm" (ngSubmit)="purchaseTickets()">
+                            <div class="d-flex">
+                                <h3 class="font-weight-bold">Purchase Tickets</h3>
+                            </div>
+                            <div class="form-group">
+                                <input 
+                                    class="form-control" 
+                                    type="number" 
+                                    name="ticketCount" 
+                                    placeholder="Enter ticket quantity" 
+                                    [(ngModel)]="ticketCount"
+                                    required 
+                                    [min]="1" 
+                                    [max]="ticketsAvailable"
+                                    #ticketCountField="ngModel"
+                                    (ngModelChange)="validateTicketCount()"
+                                    />
+
+                            </div>
+                            <button class="text-white text-weight-bold btn btn-primary" [disabled]="!ticketForm.form.valid">Purchase</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
