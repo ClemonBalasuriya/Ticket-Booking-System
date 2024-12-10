@@ -1,5 +1,6 @@
 package com.example.Ticket.Booking.System.controller;
 
+import com.example.Ticket.Booking.System.model.Customer;
 import com.example.Ticket.Booking.System.model.Vendor;
 import com.example.Ticket.Booking.System.service.VendorRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class VendorRegistrationController {
@@ -19,7 +22,8 @@ public class VendorRegistrationController {
     public Vendor registerVendor(@RequestBody Vendor vendor) throws Exception {
         String tempEmail = vendor.getEmail();
         if (tempEmail != null && !"".equals(tempEmail)) {
-            Vendor vendorObj = vendorRegistrationService.fetchVendorByEmail(tempEmail);
+            Optional<Vendor> vendorOb = vendorRegistrationService.fetchVendorByEmail(tempEmail);
+            Vendor vendorObj =vendorOb.get();
             if (vendorObj != null) {
                 throw new Exception("Vendor with " + tempEmail + " already exists.");
             }

@@ -23,9 +23,9 @@ export class TicketbookingComponent implements OnInit {
   constructor(private configServise: ConfigService, private bookingService: BookingService, private loginService:LoginService){}
 
   // This function will be called when backend sends a notification
-  handleTicketNotification(message: string) {
+  /*handleTicketNotification(message: string) {
     alert(message); // Example: Show an alert with the notification message
-  }
+  }*/
   
   
 
@@ -53,20 +53,24 @@ export class TicketbookingComponent implements OnInit {
     if (this.ticketCount !== null) {
       
       if (this.ticketCount < 1) {
+        this.ticketCount = 0; // Reset to 0 if invalid value
         alert('Ticket count cannot be less than 1.');
         
       } else if (this.ticketCount > this.ticketsAvailable) {
           if(this.retrivalRate > this.ticketsAvailable){
+            this.ticketCount =  this.ticketsAvailable; 
             alert(`Ticket count cannot be more than available tickets (${this.ticketsAvailable}).`);
           }else{
+            this.ticketCount =  this.retrivalRate;
             alert(`Ticket count cannot be more than available tickets (${this.retrivalRate}).`);
           }
         
       }else if(this.ticketCount > this.retrivalRate){
+        this.ticketCount =  this.retrivalRate;
         alert(`Ticket count cannot be more than available (${this.retrivalRate}) tickets .`);
 
       }
-      this.ticketCount = 0; // Reset to 0 if invalid value
+      
     }
   }
 
@@ -82,7 +86,9 @@ export class TicketbookingComponent implements OnInit {
       this.bookingService.purchaseTickets(data).subscribe(
         (response: number) => {  // response is the string from the backend
           this.ticketsAvailable = response;
+          this.ticketCount =0;
           this.loadTicketSummary(); // Refresh the available tickets after purchase
+          alert("Ticket Purchased.")
         },
         (error) => {
           console.error('Error purchasing tickets', error);

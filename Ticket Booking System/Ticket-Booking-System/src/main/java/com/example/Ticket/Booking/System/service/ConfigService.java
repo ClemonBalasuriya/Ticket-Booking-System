@@ -57,10 +57,23 @@ public class ConfigService {
 
     //update availableConfigTable
     public int updateAvailableTickets(){
-        long count = ticketPoolRepository.countNullCustomer();
-        configRepository.findById(1).orElseThrow().setTicketsAvailable((int)count);
-        return (int)count;
 
+        return update("AvailableTickets");
+
+    }
+    public int updateReleasedTicketsCount(){
+
+        return update("ReleasedTickets");
+
+    }
+    public int update(String name){
+        long count = ticketPoolRepository.countNullCustomer();
+        long tolCount = ticketPoolRepository.countTicketsInPool();
+        configRepository.findById(1).orElseThrow().setTicketsReleased((int)count);
+        configRepository.findById(1).orElseThrow().setTicketsReleased((int)tolCount);
+        if(name.equals("AvailableTickets")){
+            return (int)count;
+        }else return (int)tolCount;
 
     }
 }

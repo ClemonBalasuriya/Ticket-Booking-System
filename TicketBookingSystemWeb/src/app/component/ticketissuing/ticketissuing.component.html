@@ -19,13 +19,13 @@
                         <div class="row mb-4">
                             <div class="col-auto">
                                 <h3 class="font-weight-bold">Ticket Details</h3>
-                                <p><strong>Available Tickets:</strong> {{ticketsAvailable}}</p>
-                                <p><strong>Retrieval Rate:</strong> {{retrivalRate}}</p>
+                                <p><strong>Remaining Tickets:</strong> {{availableaddCount}}</p>
+                                <p><strong>Release Rate:</strong> {{releaseRate}}</p>
                             </div>
                         </div>
                         <!-- Ticket Purchase Form -->
-                        <form name="ticketForm" class="px-5 pb-5" #ticketForm="ngForm" (ngSubmit)="purchaseTickets()">
-                            <h3 class="font-weight-bold">Purchase Tickets</h3>
+                        <form name="ticketForm" class="px-5 pb-5" #ticketForm="ngForm" (ngSubmit)="issuingTickets()">
+                            <h3 class="font-weight-bold">Issue Tickets</h3>
                             <div class="form-group">
                                 <input 
                                     class="form-control" 
@@ -35,13 +35,13 @@
                                     [(ngModel)]="ticketCount"
                                     required 
                                     [min]="1" 
-                                    [max]="ticketsAvailable"
+                                    [max]="availableaddCount"
                                     #ticketCountField="ngModel"
                                     (ngModelChange)="validateTicketCount()"
                                     />
 
                             </div>
-                            <button class="text-white text-weight-bold btn btn-primary" [disabled]="!ticketForm.form.valid">Purchase</button>
+                            <button class="text-white text-weight-bold btn btn-primary" [disabled]="!ticketForm.form.valid">Issue</button>
                         </form>
                     </div>
                 </div>

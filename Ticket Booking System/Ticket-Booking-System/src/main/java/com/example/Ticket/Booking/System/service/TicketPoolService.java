@@ -20,10 +20,7 @@ public class TicketPoolService {
                 .orElseThrow(() -> new RuntimeException("Ticket not found with ID: " + id));
     }
 
-    // Get count of tickets
-    public long getTicketCountInPool() {
-        return ticketPoolRepository.countTicketsInPool();
-    }
+
 
     public long getAvailableTicketsInPool() {
         return ticketPoolRepository.countNonNullIssueDateTime();

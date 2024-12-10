@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity     //create table in database
-public class CustomerLog {
+@Entity
+public class VendorLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,6 +23,6 @@ public class CustomerLog {
 
 
     @OneToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private Vendor vendor;
 }

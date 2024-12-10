@@ -4,6 +4,7 @@ import { Customer } from '../../model/customer';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { Vendor } from '../../model/vendor';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { NgIf } from '@angular/common';
 })
 export class LoginComponent {
   customer = new Customer();
+  vendor = new Vendor();
 
   msg = '';
   selectedRole: 'Customer' | 'Staff' = 'Customer'; // Default to Customer
@@ -44,6 +46,8 @@ export class LoginComponent {
       this._service.loginVendorFromRemort(this.customer).subscribe(
         response => {
           console.log('Vendor logged in successfully:');
+          // Store customer info in the service
+          this._service.setvendorInfo(this.vendor);
           
           this._router.navigate(['ticketrelease']);
         },

@@ -19,6 +19,16 @@ export class LoginService {
     return this.customerInfo;
   }
 
+  private vendorInfo: any;
+  setvendorInfo(vendor: any) {
+    this.vendorInfo = vendor;
+  }
+
+  getvendorInfo() {
+    return this.vendorInfo;
+  }
+
+
   public loginCustomerFromRemort(customer: Customer):Observable<any>{
     return this._http.post<any>("http://localhost:8080/customerlogin", customer);
   }

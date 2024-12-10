@@ -7,6 +7,8 @@ import com.example.Ticket.Booking.System.repository.VendorRegistrationRepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class VendorRegistrationService {
 
@@ -17,7 +19,7 @@ public class VendorRegistrationService {
         return vendorRegistrationRepository.save(vendor);
     }
 
-    public Vendor fetchVendorByEmail(String email) {
+    public Optional<Vendor> fetchVendorByEmail(String email) {
         return vendorRegistrationRepository.findByEmail(email);
     }
     public Vendor fetchVendorByEmailAndPassword(String email, String password) {

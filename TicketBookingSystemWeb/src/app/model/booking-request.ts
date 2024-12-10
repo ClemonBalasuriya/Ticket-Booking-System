@@ -8,9 +8,8 @@ export class BookingRequest {
         this.customer = customer;
     }
 
-    // Setter for Customer
-    setnumOfTickets(customer: any): void {
-        this.numOfTickets = customer;
+    setnumOfTickets(count: any): void {
+        this.numOfTickets = count;
     }
 
 }

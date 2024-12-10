@@ -26,8 +26,7 @@ public class TicketBookingRequest implements Runnable {
 
             if (numOfTicketCan < numOfTickets) {
                 String message = "Not enough tickets available. Only " + numOfTicketCan + " tickets can be booked.";
-                bookingService.sendTicketNotification(message);
-
+                System.out.println(message);
             } else {
                 // Proceed to book tickets
                 for (int i = 0; i < numOfTickets; i++) {

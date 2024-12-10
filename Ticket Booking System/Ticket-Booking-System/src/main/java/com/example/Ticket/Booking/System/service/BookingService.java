@@ -81,7 +81,6 @@ public class BookingService {
             } else {
                 // If customer not found, you can either save the new customer or handle the case appropriately
                 System.out.println("Customer not found, not updating TicketPool.");
-                return;
             }
         }
 
@@ -108,7 +107,7 @@ public class BookingService {
 
         if(logDetails.isPresent()){
             CustomerLog customerLog = logDetails.get();
-            if (Duration.between(customerLog.getPreviousLogDateTime(), LocalDateTime.now()).toHours() < 1) {
+            if (Duration.between(customerLog.getPreviousLogDateTime(), LocalDateTime.now()).toHours() < 1) {// 1 mean by hour
                 return Math.max(0, rate - customerLog.getPrevious_bookingCount());
             }
         }
@@ -118,9 +117,7 @@ public class BookingService {
 
     }
 
-    public void sendTicketNotification(String msg) {
-        //sssssssssssssssssssssssssssssssssssssssssssss notify angular not suffition tickets can buy
-    }
+
 
 
 
