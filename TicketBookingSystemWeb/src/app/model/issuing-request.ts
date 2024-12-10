@@ -1,3 +1,5 @@
+import { Vendor } from "./vendor";
+
 export class IssuingRequest {
     vendor:any;
     numOfTickets: number =0;
@@ -10,4 +12,6 @@ export class IssuingRequest {
     setnumOfTickets(count: any): void {
         this.numOfTickets = count;
     }
+
+   
 }

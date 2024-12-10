@@ -21,7 +21,7 @@ public class TicketPool {
     private LocalDateTime purchaseDateTime;
 
     @ManyToOne // Many tickets can belong to the same pool
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @JoinColumn(name = "ticket_id", nullable = true)
     private Ticket ticket;
 
     @ManyToOne // Indicates a many-to-one relationship

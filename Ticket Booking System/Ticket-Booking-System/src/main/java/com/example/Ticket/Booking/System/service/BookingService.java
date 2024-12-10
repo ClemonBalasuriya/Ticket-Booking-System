@@ -100,6 +100,7 @@ public class BookingService {
     }
 
     public int getCountOfTicketCan(String threadName){
+
         Optional<CustomerLog> logDetails = customerLogRepository.findByThreadName(threadName);
         int rate = configRepository.findById(TICKET_POOL_ID)
                 .orElseThrow(() -> new RuntimeException("Configuration not found"))

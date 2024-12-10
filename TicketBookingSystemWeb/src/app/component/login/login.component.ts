@@ -16,6 +16,7 @@ export class LoginComponent {
   customer = new Customer();
   vendor = new Vendor();
 
+  currentModel: Customer | Vendor = this.customer;
   msg = '';
   selectedRole: 'Customer' | 'Staff' = 'Customer'; // Default to Customer
 
@@ -43,7 +44,7 @@ export class LoginComponent {
     } else if (this.selectedRole === 'Staff') {
  
 
-      this._service.loginVendorFromRemort(this.customer).subscribe(
+      this._service.loginVendorFromRemort(this.vendor).subscribe(
         response => {
           console.log('Vendor logged in successfully:');
           // Store customer info in the service
@@ -63,6 +64,7 @@ export class LoginComponent {
   selectRole(role: 'Customer' | 'Staff') {
     this.selectedRole = role;
     console.log(`${role} selected`);
+    this.currentModel = (role === 'Customer') ? this.customer : this.vendor;
   }
 
   // Navigate to registration

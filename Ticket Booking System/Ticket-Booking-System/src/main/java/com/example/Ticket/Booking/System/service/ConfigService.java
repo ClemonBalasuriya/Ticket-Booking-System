@@ -7,11 +7,23 @@ import com.example.Ticket.Booking.System.repository.TicketPoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConfigService {
 
     @Autowired
     private ConfigRepository configRepository;
+
+    public Configuration readConfigDataBase(){
+        return configRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Configuration not found"));
+
+    }
+
+
+
+
 
     @Autowired
     private TicketPoolRepository ticketPoolRepository;
@@ -56,24 +68,34 @@ public class ConfigService {
     }
 
     //update availableConfigTable
-    public int updateAvailableTickets(){
-
+    public synchronized int updateAvailableTickets() {
         return update("AvailableTickets");
-
     }
-    public int updateReleasedTicketsCount(){
-
+    public synchronized int updateReleasedTicketsCount() {
         return update("ReleasedTickets");
-
     }
-    public int update(String name){
-        long count = ticketPoolRepository.countNullCustomer();
-        long tolCount = ticketPoolRepository.countTicketsInPool();
-        configRepository.findById(1).orElseThrow().setTicketsReleased((int)count);
-        configRepository.findById(1).orElseThrow().setTicketsReleased((int)tolCount);
-        if(name.equals("AvailableTickets")){
-            return (int)count;
-        }else return (int)tolCount;
 
+    public synchronized int update(String name) {
+        long count = ticketPoolRepository.countNullCustomer();
+        long totalCount = ticketPoolRepository.countTicketsInPool();
+
+        Configuration config = configRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Configuration not found"));
+
+        System.out.println(configRepository.findById(1).orElseThrow().getTicketsReleased());
+        System.out.println(configRepository.findById(1).orElseThrow().getTicketsAvailable());
+        config.setTicketsReleased((int) totalCount);
+        config.setTicketsAvailable((int) count);
+
+        System.out.println((int) totalCount);
+
+        configRepository.save(config);
+        System.out.println(configRepository.findById(1).orElseThrow().getTicketsReleased());
+
+        if (name.equals("AvailableTickets")) {
+            return (int) count;
+        } else {
+            return (int) totalCount;
+        }
     }
 }

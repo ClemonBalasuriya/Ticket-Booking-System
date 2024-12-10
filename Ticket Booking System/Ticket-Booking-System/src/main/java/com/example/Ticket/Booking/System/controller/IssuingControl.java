@@ -22,15 +22,15 @@ public class IssuingControl {
     @PostMapping("/ticketrelease")
     @CrossOrigin(origins = "http://localhost:4200")
     public int issueTicket(@RequestBody TicketReleasingRequest request){
-        configService.updateReleasedTicketsCount();
+
         try {
             issuingService.issueTicket(request.getVendor(), request.getNumOfTickets());
 
             // Return a success response if everything goes well
-            return configService.updateReleasedTicketsCount();
+            return issuingService.getVal();
         } catch (Exception e) {
             // Return an error response if something goes wrong
-            return configService.updateReleasedTicketsCount();
+            return 0;
         }
 
     }

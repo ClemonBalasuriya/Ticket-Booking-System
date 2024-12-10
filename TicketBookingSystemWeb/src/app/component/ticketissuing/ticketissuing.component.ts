@@ -4,6 +4,7 @@ import { ConfigService } from '../../service/config.service';
 import { RelesingService } from '../../service/relesing.service';
 import { LoginService } from '../../service/login.service';
 import { IssuingRequest } from '../../model/issuing-request';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ticketissuing',
@@ -13,12 +14,15 @@ import { IssuingRequest } from '../../model/issuing-request';
   })
 export class TicketissuingComponent implements OnInit{
 
+  ticketRelease: number = 0;
+  val :number =0;
   vendorInfo: any;
+  maxTicket : number = 0;
   availableaddCount: number = 0;
   releaseRate: number = 0;
   ticketCount: number | null = null; // Stores the input ticket count
 
-  constructor(private configServise: ConfigService, private releasingService: RelesingService, private loginService:LoginService){}
+  constructor(private configServise: ConfigService, private releasingService: RelesingService, private loginService:LoginService, private _router:Router){}
 
   ngOnInit(): void {
     this.loadTicketSummary();
@@ -29,7 +33,9 @@ export class TicketissuingComponent implements OnInit{
   loadTicketSummary(): void {
     this.configServise.getTicketsSummary().subscribe(
       (data) =>{
-        this.availableaddCount =  (data.totalTickets-data.ticketsReleased);
+        this.maxTicket = data.totalTickets;
+        this.ticketRelease =data.ticketsReleased
+        this.availableaddCount =  (this.maxTicket-this.ticketRelease);
         this.releaseRate = data.vendor_release_rate;
 
       },
@@ -41,8 +47,10 @@ export class TicketissuingComponent implements OnInit{
   // Validate the ticket count entered
   validateTicketCount(): void {
     
+    
+    
     if (this.ticketCount !== null) {
-      
+            
       if (this.ticketCount < 1) {
         this.ticketCount = 0; // Reset to 0 if invalid value
         alert('Ticket count cannot be less than 1.');
@@ -66,26 +74,38 @@ export class TicketissuingComponent implements OnInit{
   }
 
   issuingTickets(): void {
+
     
     if (this.ticketCount && this.ticketCount > 0 && this.ticketCount <= this.availableaddCount) {
+      
+
       let data = new IssuingRequest();
       data.setVendor(this.vendorInfo);
       data.setnumOfTickets(this.ticketCount);
       
       this.releasingService.issuingTickets(data).subscribe(
-        (response: number) => {  // response is the string from the backend
-          this.availableaddCount = response;
+        (response: number) => {
+          
+          alert(response);  // response is the string from the backend
+          if (response === 0) {
+            // Show alert if response matches availableaddCount
+            alert('Invalid. Try Again');
+            this._router.navigate(['login']);
+            return;
+          }
           this.ticketCount =0;
-          this.loadTicketSummary(); // Refresh the available tickets after purchase
+
           alert("Ticket Issued.")
+          this._router.navigate(['login']);
         },
         (error) => {
           console.error('Error issuing tickets', error);
           alert('Error issuing tickets. Please try again later.');
         }
       );
+
     }
-    this.loadTicketSummary();
+    
   }
 
 

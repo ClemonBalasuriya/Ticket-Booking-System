@@ -39,12 +39,12 @@
                             </div>
                             <small class="text-danger">{{ msg }}</small>
                             <div class="form-group">
-                                <input class="form-control" type="email" name="email" placeholder="Enter email" [(ngModel)]="customer.email" required
+                                <input class="form-control" type="email" name="email" placeholder="Enter email" [(ngModel)]="currentModel.email" required
                                     #email="ngModel" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" [class.is-invalid]="email.touched && email.invalid" />
                                 <small class="text-danger" *ngIf="email.touched && email.invalid">Enter a valid email.</small>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="password" name="password" placeholder="Enter password" [(ngModel)]="customer.password"
+                                <input class="form-control" type="password" name="password" placeholder="Enter password" [(ngModel)]="currentModel.password"
                                     #password="ngModel" required [class.is-invalid]="password.touched && password.invalid">
                                 <small class="text-danger" *ngIf="password.touched && password.invalid">Password is required.</small>
                             </div>

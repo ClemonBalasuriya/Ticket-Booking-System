@@ -12,33 +12,25 @@ import lombok.NoArgsConstructor;
 public class TicketReleasingRequest implements Runnable {
     private Vendor vendor;
     private int numOfTickets;
-
     private IssuingService issuingService;
 
     public void run() {
+
         String threadName = Thread.currentThread().getName();
         try {
-            // Retrieve the maximum number of tickets the vendor can issue
-            int numOfTicketCan = issuingService.getCountOfTicketCan(threadName);
+            int numOfTicketCan = issuingService.getCountOfTicketCan(threadName,numOfTickets,vendor,issuingService);
 
-
-            if (numOfTickets < issuingService.onlyCanAddTicket()) {
-                if (numOfTicketCan >= numOfTickets){
-                    // Proceed to book tickets
-                    for (int i = 0; i < numOfTickets; i++) {
-                        issuingService.issueForTicketPool(vendor);
-                    }
-                    issuingService.editNumOfReleasedTicketAndAvailableTickets();
-
-                }
-            }else{
-                System.out.println("Try to add existing ticket than the number of can add");
+            for (int i = 0; i < numOfTicketCan; i++) {
+                issuingService.releasingTickets(vendor);
             }
 
+            issuingService.setTicketPollConfig(numOfTicketCan);
+            System.out.println(numOfTicketCan + " tickets released.");
+            issuingService.setVal(numOfTicketCan);
+            issuingService.setVal(numOfTicketCan);
 
         } catch (Exception e) {
-            // Log the exception and notify Angular
-            System.err.println("Error in ticket booking: " + e.getMessage());
+            System.err.println("Error in ticket issuing: " + e.getMessage());
         }
 
     }

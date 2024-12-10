@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Customer } from '../model/customer';
 import { Observable } from 'rxjs';
+import { Vendor } from '../model/vendor';
 
 @Injectable({
   providedIn: 'root'
@@ -32,13 +33,13 @@ export class LoginService {
   public loginCustomerFromRemort(customer: Customer):Observable<any>{
     return this._http.post<any>("http://localhost:8080/customerlogin", customer);
   }
-  public loginVendorFromRemort(customer: Customer):Observable<any>{
-    return this._http.post<any>("http://localhost:8080/vendorlogin", customer);
+  public loginVendorFromRemort(vendor: Vendor):Observable<any>{
+    return this._http.post<any>("http://localhost:8080/vendorlogin", vendor);
   }
   registerCustomer(customer: Customer): Observable<Customer> {
     return this._http.post<Customer>("http://localhost:8080/registercustomer", customer);
   }
-  registerVendor(customer: Customer): Observable<Customer> {
-    return this._http.post<Customer>("http://localhost:8080/registervendor", customer);
+  registerVendor(vendor: Vendor): Observable<Customer> {
+    return this._http.post<Vendor>("http://localhost:8080/registervendor", vendor);
   }
 }

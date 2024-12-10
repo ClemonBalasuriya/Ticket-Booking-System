@@ -39,6 +39,10 @@ public class VendorRegistrationController {
 
         String tempEmail = vendor.getEmail();
         String tempPassword = vendor.getPassword();
+        System.out.println(tempEmail);
+        System.out.println(tempPassword);
+
+
         Vendor vendorObj = null;
         if (tempEmail != null && tempPassword != null) {
             vendorObj = vendorRegistrationService.fetchVendorByEmailAndPassword(tempEmail, tempPassword);
@@ -46,6 +50,8 @@ public class VendorRegistrationController {
         if (vendorObj == null) {
             throw new Exception("Bad credentials");
         }
+        System.out.println(vendorObj.getEmail());
+        System.out.println(vendorObj.getPassword());
 
         return vendorObj;
     }

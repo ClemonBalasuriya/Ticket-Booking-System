@@ -3,6 +3,7 @@ package com.example.Ticket.Booking.System.service;
 import com.example.Ticket.Booking.System.model.*;
 import com.example.Ticket.Booking.System.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,144 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Data
 @Service
 public class IssuingService {
+
+    int val =0;
+
+    @Autowired
+    private ConfigRepository configRepository;
+
     @Autowired
     private ConfigService configService;
+
+    @Transactional
+    public void issueTicket(Vendor vendor, int numOfTickets){
+
+        TicketReleasingRequest task = new TicketReleasingRequest(vendor,numOfTickets,this);
+        Thread thread = new Thread(task, vendor.getEmail());
+        thread.start();
+
+
+    }
+
+    public Configuration getTicketPoolConfig() {
+        return  configService.readConfigDataBase();
+    }
+
+    public void setTicketPollConfig(int ticketsReleased ){
+        Configuration configuration = configRepository.findById(1).orElse(null);
+        if (configuration != null) {
+            // Update the ticketsReleased field
+            configuration.setTicketsReleased(ticketsReleased);
+
+            // Save the updated entity back to the database
+            configRepository.save(configuration);
+        }
+
+    }
+
+    public Vendor getVendorDetails(Vendor vendor) {
+
+        if (vendor != null) {
+
+            String vendorEmail = vendor.getEmail();
+            Optional<Vendor> existingVendor = vendorRegistrationRepository.findByEmail(vendorEmail);
+            if (existingVendor.isPresent()) {
+                return existingVendor.get();
+
+            } else {
+                System.out.println("Vendor not found, not updating TicketPool.");
+            }
+        }
+        return null;
+    }
+
+    public  int getCountOfTicketCan(String threadName,int countIssue,Vendor vendor,IssuingService issuingService){
+        Configuration configDetails =  issuingService.getTicketPoolConfig();
+        Vendor vendorDetails = getVendorDetails(vendor);
+        if(vendorDetails == null){return 0;}
+        int canIssueCount =0;
+        Optional<VendorLog> logDetails = vendorLogRepository.findByThreadName(threadName);
+        //Optional<Integer> configDetail = configRepository.findVendorReleaseRateById(Integer.valueOf("1"));
+        //int rate = configDetails.get();
+        int releaseRate = configDetails.getVendor_release_rate();
+
+        if(countIssue<=releaseRate){
+            if(logDetails.isPresent()){
+                VendorLog vendorLog = logDetails.get();
+                if (Duration.between(vendorLog.getPreviousLogDateTime(), LocalDateTime.now()).toMinutes() < 60) {// 1 mean by hour
+
+                    int earlierIssueCount = vendorLog.getPrevious_bookingCount();
+                    canIssueCount = Math.max(0, releaseRate -earlierIssueCount );
+
+                    if(canIssueCount<countIssue){
+                        System.out.println("Only can issue : "+canIssueCount+" tickets");
+                        return 0;
+                    }else{
+                        vendorLog.setPrevious_bookingCount(countIssue+earlierIssueCount);
+                        vendorLogRepository.save(vendorLog);
+
+                    }
+
+                }else{
+                    vendorLog.setPreviousLogDateTime(LocalDateTime.now());
+                    vendorLog.setPrevious_bookingCount(countIssue);
+                    vendorLogRepository.save(vendorLog);
+
+                }
+
+            }else{
+                VendorLog newLog = new VendorLog();
+                newLog.setVendor(vendorDetails);
+                newLog.setThreadName(threadName);
+                newLog.setPreviousLogDateTime(LocalDateTime.now());
+                newLog.setPrevious_bookingCount(countIssue);
+                vendorLogRepository.save(newLog);
+
+            }
+            return countIssue;
+
+
+        }else{
+            System.out.println("Only one ticket can issue: "+releaseRate+" tickets.");
+            return 0;
+        }
+
+
+    }
+
+    public void releasingTickets(Vendor vendor){
+        if (vendor != null) {
+            Optional<Vendor> existingCustomer = vendorRegistrationRepository.findByEmail(vendor.getEmail());
+            if (existingCustomer.isPresent()) {
+                vendor = existingCustomer.get();
+                TicketPool ticketPool= new TicketPool();
+                ticketPool.setIssuer(vendor);
+                ticketPool.setTicket(new Ticket(1,"Film",20));
+                ticketPool.setIssueDateTime(LocalDateTime.now());
+                ticketPoolRepository.save(ticketPool);
+                System.out.println("Releasing TicketPool");
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
 
     @Autowired
     private BookingService bookingService;
@@ -23,8 +158,7 @@ public class IssuingService {
     @Autowired
     private TicketPoolRepository ticketPoolRepository;
 
-    @Autowired
-    private ConfigRepository configRepository;
+
 
     @Autowired
     private VendorLogRepository vendorLogRepository;
@@ -49,61 +183,12 @@ public class IssuingService {
 
     }
 
-    public void issueForTicketPool(Vendor vendor) {
-
-        if (vendor != null) {
-            Optional<Vendor> existingVendor = vendorRegistrationRepository.findByEmail("avishkaclemon@gmail.com");
-
-            if (existingVendor.isPresent()) {
-
-                vendor = existingVendor.get();
-
-
-                TicketPool ticket = new TicketPool();
-                ticket.setIssuer(vendor);
-                ticket.setIssueDateTime(LocalDateTime.now());
-                ticket.setId(1);
-                System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-                ticketPoolRepository.save(ticket);
-                System.out.println("Ticket added to the pool.");
-
-
-            } else {
-                // If customer not found, you can either save the new customer or handle the case appropriately
-                System.out.println("Vendor not found, not updating TicketPool.");
-            }
-        }
-
-    }
-
-    @Transactional
-    public void issueTicket(Vendor vendor, int numOfTickets){
-
-
-        TicketReleasingRequest task = new TicketReleasingRequest(vendor,numOfTickets,this);
-        Thread thread = new Thread(task,vendor.getEmail());
-        thread.start();
-
-    }
-
-    public int getCountOfTicketCan(String threadName){
-        Optional<VendorLog> logDetails = vendorLogRepository.findByThreadName(threadName);
-        int rate = configRepository.findById(TICKET_POOL_ID)
-                .orElseThrow(() -> new RuntimeException("Configuration not found"))
-                .getVendor_release_rate();
-
-        if(logDetails.isPresent()){
-            VendorLog vendorLog = logDetails.get();
-            if (Duration.between(vendorLog.getPreviousLogDateTime(), LocalDateTime.now()).toHours() < 1) {// 1 mean by hour
-                return Math.max(0, rate - vendorLog.getPrevious_bookingCount());
-            }
-        }
-        return rate;
-
-    }
 
     public int onlyCanAddTicket(){
         return (configRepository.findById(1).orElseThrow().getTotalTickets() - configService.getTotalReleaseTickets());
     }
+
+
+
 
 }
