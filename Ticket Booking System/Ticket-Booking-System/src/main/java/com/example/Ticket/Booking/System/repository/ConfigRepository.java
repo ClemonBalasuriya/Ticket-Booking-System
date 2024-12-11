@@ -11,8 +11,4 @@ import java.util.Optional;
 @Repository
 public interface ConfigRepository extends JpaRepository<Configuration, Integer> {
 
-    @Query("SELECT v.vendor_release_rate FROM Configuration v WHERE v.id = :id")
-    Optional<Integer> findVendorReleaseRateById(@Param("id") Integer id);
-
-
 }

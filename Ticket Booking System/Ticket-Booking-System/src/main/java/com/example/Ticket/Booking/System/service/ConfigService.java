@@ -11,29 +11,16 @@ import java.util.List;
 
 @Service
 public class ConfigService {
-
     @Autowired
     private ConfigRepository configRepository;
-
-    public Configuration readConfigDataBase(){
-        return configRepository.findById(1)
-                .orElseThrow(() -> new RuntimeException("Configuration not found"));
-
-    }
-
-
-
-
 
     @Autowired
     private TicketPoolRepository ticketPoolRepository;
 
-
     // Method to update configuration values by ID
-    public Configuration updateTicketConfig(int maxTickets, int customerRetrievalRate, int vendorReleaseRate) {
+    public synchronized Configuration updateTicketConfig(int maxTickets, int customerRetrievalRate, int vendorReleaseRate) {
         // Retrieve the configuration by ID
-        Configuration configuration = configRepository.findById(1)
-                .orElseThrow(() -> new RuntimeException("Configuration not found with ID: " + 1));
+        Configuration configuration = readConfigDataBase();
 
         // Update the configuration fields
         configuration.setTotalTickets(maxTickets);
@@ -42,6 +29,12 @@ public class ConfigService {
 
         // Save the updated configuration back to the database
         return configRepository.save(configuration);
+    }
+
+    public Configuration readConfigDataBase(){
+        return configRepository.findById(1)
+                .orElseThrow(() -> new RuntimeException("Configuration not found with ID: " + 1));
+
     }
 
     // read the total tickets count
@@ -71,9 +64,7 @@ public class ConfigService {
     public synchronized int updateAvailableTickets() {
         return update("AvailableTickets");
     }
-    public synchronized int updateReleasedTicketsCount() {
-        return update("ReleasedTickets");
-    }
+    public synchronized int updateReleasedTicketsCount() {return update("ReleasedTickets");}
 
     public synchronized int update(String name) {
         long count = ticketPoolRepository.countNullCustomer();

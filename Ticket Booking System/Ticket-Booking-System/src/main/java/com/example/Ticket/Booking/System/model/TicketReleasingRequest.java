@@ -24,9 +24,10 @@ public class TicketReleasingRequest implements Runnable {
                 issuingService.releasingTickets(vendor);
             }
 
-            issuingService.setTicketPollConfig(numOfTicketCan);
+            int updatedTicketsReleased = issuingService.setTicketPollConfig(numOfTicketCan);
             System.out.println(numOfTicketCan + " tickets released.");
-            issuingService.setVal(numOfTicketCan);
+
+
             issuingService.setVal(numOfTicketCan);
 
         } catch (Exception e) {

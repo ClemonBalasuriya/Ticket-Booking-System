@@ -27,12 +27,12 @@ public class ConfigController {
         return (new Configuration(1,totalTickets,totalTicketsReleased,totalTicketsAvailable,customer_retrieval_rate,vendor_release_rate) );
 
     }
+
     @PostMapping("/changeconfig")
     @CrossOrigin(origins = "http://localhost:4200")
     public Configuration changeConfig(@RequestBody Configuration configuration) throws Exception {
-        configurationService.updateAvailableTickets();
-        return configurationService.updateTicketConfig(configuration.getTotalTickets(),configuration.getCustomer_retrieval_rate(),configuration.getVendor_release_rate());
 
+        return configurationService.updateTicketConfig(configuration.getTotalTickets(),configuration.getCustomer_retrieval_rate(),configuration.getVendor_release_rate());
     }
 
 }

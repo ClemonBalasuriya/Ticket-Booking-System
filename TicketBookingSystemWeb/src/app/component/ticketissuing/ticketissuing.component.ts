@@ -38,6 +38,7 @@ export class TicketissuingComponent implements OnInit{
         this.availableaddCount =  (this.maxTicket-this.ticketRelease);
         this.releaseRate = data.vendor_release_rate;
 
+
       },
       (error ) => console.error("Error in Ticket Summary",error)
     );
@@ -72,6 +73,7 @@ export class TicketissuingComponent implements OnInit{
       
     }
   }
+  
 
   issuingTickets(): void {
 
@@ -86,23 +88,19 @@ export class TicketissuingComponent implements OnInit{
       this.releasingService.issuingTickets(data).subscribe(
         (response: number) => {
           
-          alert(response);  // response is the string from the backend
-          if (response === 0) {
-            // Show alert if response matches availableaddCount
-            alert('Invalid. Try Again');
-            this._router.navigate(['login']);
-            return;
-          }
-          this.ticketCount =0;
+          
+          alert(` tickets issued successfully.`);
+          this.loadTicketSummary(); // Fetch updated ticket count immediately after issuing
+          this.ticketCount = 0;
 
-          alert("Ticket Issued.")
-          this._router.navigate(['login']);
+      
         },
         (error) => {
           console.error('Error issuing tickets', error);
           alert('Error issuing tickets. Please try again later.');
         }
-      );
+        
+      );      
 
     }
     

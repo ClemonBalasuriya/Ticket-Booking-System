@@ -13,13 +13,14 @@ public class CustomerRegistrationService {
     @Autowired
     private CustomerRegistrationRepository customerRegistrationRepository;
 
+    public Optional<Customer> fetchCustomerByEmail(String email) {
+        return customerRegistrationRepository.findByEmail(email);
+    }
+
     public Customer saveCustomer(Customer customer) {
         return customerRegistrationRepository.save(customer);
     }
 
-    public Optional<Customer> fetchCustomerByEmail(String email) {
-        return customerRegistrationRepository.findByEmail(email);
-    }
     public Customer fetchCustomerByEmailAndPassword(String email, String password) {
         return customerRegistrationRepository.findByEmailAndPassword(email, password);
     }

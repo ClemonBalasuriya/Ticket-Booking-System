@@ -17,10 +17,9 @@ public class CustomerRegistrationController {
     @CrossOrigin(origins = "http://localhost:4200")
     public Customer registerCustomer(@RequestBody Customer customer) throws Exception {
         String tempEmail = customer.getEmail();
-        if (tempEmail != null && !"".equals(tempEmail)  ) {
+        if (tempEmail != null && !tempEmail.isEmpty() ) {
             Optional<Customer> customerOb = customerRegistrationService.fetchCustomerByEmail(tempEmail);
-            Customer customerObj = customerOb.get();
-            if (customerObj != null) {
+            if (customerOb.isPresent()) {
                 throw new Exception("Customer with"+tempEmail+"is already exist.");
             }
         }
@@ -38,12 +37,10 @@ public class CustomerRegistrationController {
         Customer customerObj =null;
         if (tempEmail != null && tempPassword != null  ) {
             customerObj = customerRegistrationService.fetchCustomerByEmailAndPassword(tempEmail, tempPassword);
-
         }
         if (customerObj == null) {
-            throw new Exception("Bad credentials");
+            throw new Exception("Bad credentials Customer Login");
         }
-
         return customerObj;
     }
 }

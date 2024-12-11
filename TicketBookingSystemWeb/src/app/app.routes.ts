@@ -8,7 +8,7 @@ import { TicketissuingComponent } from './component/ticketissuing/ticketissuing.
 export const routes: Routes = [
     {path:'',component:ConfigComponent},
     {path:'login',component:LoginComponent},
-    {path:'ticketbooking', component:TicketbookingComponent},
+    {path:'ticketbook', component:TicketbookingComponent},
     {path:'registration', component:RegistrationComponent},
     {path:'ticketrelease', component:TicketissuingComponent}
 ];

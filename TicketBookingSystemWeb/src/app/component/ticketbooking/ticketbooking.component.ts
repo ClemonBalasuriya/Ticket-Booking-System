@@ -6,6 +6,7 @@ import { BookingService } from '../../service/booking.service';
 import { NgIf } from '@angular/common';
 import { LoginService } from '../../service/login.service';
 import { BookingRequest } from '../../model/booking-request';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ticketbooking',
@@ -20,7 +21,7 @@ export class TicketbookingComponent implements OnInit {
   retrivalRate: number = 0;
   ticketCount: number | null = null; // Stores the input ticket count
 
-  constructor(private configServise: ConfigService, private bookingService: BookingService, private loginService:LoginService){}
+  constructor(private configServise: ConfigService, private bookingService: BookingService, private loginService:LoginService, private _router:Router){}
 
   // This function will be called when backend sends a notification
   /*handleTicketNotification(message: string) {
@@ -85,18 +86,20 @@ export class TicketbookingComponent implements OnInit {
       // Call the booking service to process the ticket purchase
       this.bookingService.purchaseTickets(data).subscribe(
         (response: number) => {  // response is the string from the backend
-          this.ticketsAvailable = response;
-          this.ticketCount =0;
-          this.loadTicketSummary(); // Refresh the available tickets after purchase
-          alert("Ticket Purchased.")
+
+          alert(`${response} tickets issued successfully.`);
+          this.loadTicketSummary(); // Fetch updated ticket count immediately after issuing
+          this.ticketCount = 0;
+          
         },
         (error) => {
           console.error('Error purchasing tickets', error);
           alert('Error purchasing tickets. Please try again later.');
         }
       );
+
+      
     }
-    this.loadTicketSummary();
   }
 
 

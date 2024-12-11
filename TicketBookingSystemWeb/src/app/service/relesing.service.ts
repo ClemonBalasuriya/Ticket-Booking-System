@@ -11,6 +11,12 @@ export class RelesingService {
 
 
   issuingTickets(data: IssuingRequest): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/ticketrelease', data);
+    return this.http.post<any>('http://localhost:8080/ticketreleasing', data);
   }
+
+  getVal(): Observable<number> {
+    return this.http.get<number>(`http://localhost:8080/ticketreleasingdata`); 
+  }
+
+
 }

@@ -70,7 +70,6 @@ export class ConfigComponent implements OnInit {
 
       this.configServise.changeConfig(this.config).subscribe(
         response =>{
-
           console.log('Config change');
         },
         error=>{

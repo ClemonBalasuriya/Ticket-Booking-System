@@ -22,20 +22,23 @@ public class BookingController {
 
     @PostMapping("/ticketbooking")
     @CrossOrigin(origins = "http://localhost:4200")
-    public int bookTicket(@RequestBody TicketBookingRequest request){
+    public void bookTicket(@RequestBody TicketBookingRequest request){
         configService.updateAvailableTickets();
         try {
             // Call the booking service to process the ticket booking
             bookingService.bookTicket(request.getCustomer(), request.getNumOfTickets());
 
-            // Return a success response if everything goes well
-            return configService.updateAvailableTickets();
         } catch (Exception e) {
-            // Return an error response if something goes wrong
-            return configService.updateAvailableTickets();
+            System.out.println("Error occurred in BookingController");
         }
 
     }
+
+   /* @GetMapping ("/ticketbookingdata")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public int getbookTicketdata(){
+        return bookingService.getVal();
+    }*/
 
 
 

@@ -34,7 +34,7 @@ export class LoginComponent {
           console.log('Customer logged in successfully:');
           // Store customer info in the service
           this._service.setCustomerInfo(this.customer);
-          this._router.navigate(['ticketbooking']);
+          this._router.navigate(['ticketbook']);
         },
         error => {
           this.msg = 'Enter the valid email id and password.';

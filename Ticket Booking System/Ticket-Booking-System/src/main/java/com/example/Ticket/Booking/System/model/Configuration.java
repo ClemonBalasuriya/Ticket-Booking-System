@@ -14,12 +14,10 @@ import lombok.NoArgsConstructor;
 public class Configuration {
     @Id
     private int id;
-
     private int totalTickets;
     private int ticketsReleased;
     private int ticketsAvailable;
     private int customer_retrieval_rate;
     private int vendor_release_rate;
-    ;
 
 }

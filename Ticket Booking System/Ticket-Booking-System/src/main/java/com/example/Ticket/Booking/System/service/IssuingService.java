@@ -24,6 +24,24 @@ public class IssuingService {
     @Autowired
     private ConfigService configService;
 
+    @Autowired
+    private TicketRepository ticketRepository;
+
+
+    @Autowired
+    private BookingService bookingService;
+
+    @Autowired
+    private TicketPoolRepository ticketPoolRepository;
+
+    @Autowired
+    private VendorLogRepository vendorLogRepository;
+
+    @Autowired
+    private VendorRegistrationRepository vendorRegistrationRepository;
+
+    private final int TICKET_POOL_ID = 1;
+
     @Transactional
     public void issueTicket(Vendor vendor, int numOfTickets){
 
@@ -38,15 +56,18 @@ public class IssuingService {
         return  configService.readConfigDataBase();
     }
 
-    public void setTicketPollConfig(int ticketsReleased ){
+    public int setTicketPollConfig(int ticketsReleased ){
         Configuration configuration = configRepository.findById(1).orElse(null);
         if (configuration != null) {
+            int releasedCount = configuration.getTicketsReleased();
             // Update the ticketsReleased field
-            configuration.setTicketsReleased(ticketsReleased);
+            configuration.setTicketsReleased(releasedCount+ticketsReleased);
 
             // Save the updated entity back to the database
             configRepository.save(configuration);
+            return configuration.getTicketsReleased();
         }
+        return 0;
 
     }
 
@@ -147,27 +168,8 @@ public class IssuingService {
 
 
 
-    @Autowired
-    private TicketRepository ticketRepository;
 
-
-    @Autowired
-    private BookingService bookingService;
-
-
-    @Autowired
-    private TicketPoolRepository ticketPoolRepository;
-
-
-
-    @Autowired
-    private VendorLogRepository vendorLogRepository;
-
-    @Autowired
-    private VendorRegistrationRepository vendorRegistrationRepository;
-
-    private final int TICKET_POOL_ID = 1;
-
+    /*
     public void editNumOfReleasedTicketAndAvailableTickets(){
         long numOfReleasedTickets = ticketPoolRepository.countTicketsInPool();
         Optional<Configuration> ticketPool = configRepository.findById(TICKET_POOL_ID);
@@ -187,7 +189,7 @@ public class IssuingService {
     public int onlyCanAddTicket(){
         return (configRepository.findById(1).orElseThrow().getTotalTickets() - configService.getTotalReleaseTickets());
     }
-
+    */
 
 
 
