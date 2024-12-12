@@ -21,9 +21,10 @@ public class IssuingControl {
     @CrossOrigin(origins = "http://localhost:4200")
     public int issueTicket(@RequestBody TicketReleasingRequest request){
         try {
-            issuingService.issueTicket(request.getVendor(), request.getNumOfTickets());
-            Configuration config = configService.readConfigDataBase();
-            return config != null ? config.getTicketsReleased() : 0; // Always fetch the latest cou
+            return issuingService.issueTicket(request.getVendor(), request.getNumOfTickets());
+            //Configuration config = configService.readConfigDataBase();
+            //return config != null ? config.getTicketsReleased() : 0; // Always fetch the latest cou
+
         } catch (Exception e) {
             System.out.println("Error occurred in BookingController");
             return 0;

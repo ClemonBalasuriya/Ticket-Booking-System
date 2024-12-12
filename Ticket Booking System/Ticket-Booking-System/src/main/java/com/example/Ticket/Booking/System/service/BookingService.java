@@ -20,7 +20,6 @@ import java.util.Optional;
 @Data
 @Service
 public class BookingService {
-    private int val =0;
 
     @Autowired
     private CustomerLogRepository customerLogRepository;
@@ -39,15 +38,17 @@ public class BookingService {
 
 
     @Transactional
-    public void bookTicket(Customer customer, int numOfTickets){
+    public  int bookTicket(Customer customer, int numOfTickets){
         // Create a TicketBookingTask with customer, number of tickets, and the current service
         TicketBookingRequest task = new TicketBookingRequest(customer,numOfTickets,this);
         Thread thread = new Thread(task, customer.getEmail());
         thread.start();
+        int val = task.getNumOfTickets();
+        return val;
 
     }
 
-    public Customer getCustomerDetails(Customer customer) {
+    public synchronized Customer getCustomerDetails(Customer customer) {
 
         if (customer != null) {
 
@@ -67,20 +68,24 @@ public class BookingService {
         return  configService.readConfigDataBase();
     }
 
-    public int getCountOfTicketCan(String threadName,int countBook,Customer customer,BookingService bookingService){
+    //give the count of how many ticket can purchase
+    public synchronized int getCountOfTicketCan(String threadName,int countBook,Customer customer,BookingService bookingService){
+
         Configuration configDetails =  bookingService.getTicketPoolConfig();
         Customer customerDetails = getCustomerDetails(customer);
+
         if(customerDetails == null){return 0;}
         int canBookCount =0;
-        Optional<CustomerLog> logDetails = customerLogRepository.findByThreadName(threadName);
-        int releaseRate = configDetails.getCustomer_retrieval_rate();
 
-        if(countBook<=releaseRate){
+        Optional<CustomerLog> logDetails = customerLogRepository.findByThreadName(threadName);
+        int retrievalRate = configDetails.getCustomer_retrieval_rate();
+
+        if(countBook<=retrievalRate){
             if(logDetails.isPresent()) {
                 CustomerLog customerLog = logDetails.get();
                 if (Duration.between(customerLog.getPreviousLogDateTime(), LocalDateTime.now()).toMinutes() < 60) {// 1 mean by hour
                     int earlierIssueCount = customerLog.getPrevious_bookingCount();
-                    canBookCount = Math.max(0, releaseRate - earlierIssueCount);
+                    canBookCount = Math.max(0, retrievalRate - earlierIssueCount);
                     if (canBookCount < countBook) {
                         System.out.println("Only can issue : " + canBookCount + " tickets");
                         return 0;
@@ -107,7 +112,7 @@ public class BookingService {
             return countBook;
 
         }else{
-            System.out.println("Only one ticket can issue: "+releaseRate+" tickets.");
+            System.out.println("Only one ticket can issue: "+retrievalRate+" tickets.");
             return 0;
         }
 
@@ -154,7 +159,7 @@ public class BookingService {
     }
 
     @Transactional
-    public int setTicketPollConfig(int ticketsBooked ){
+    public synchronized int setTicketPollConfig(int ticketsBooked ){
         Configuration configuration = configRepository.findById(1).orElse(null);
         if (configuration != null) {
             int availableTickets = configuration.getTicketsAvailable();
@@ -164,7 +169,7 @@ public class BookingService {
             // Save the updated entity back to the database
             configRepository.save(configuration);
 
-            return configuration.getTicketsReleased();
+            return configuration.getTicketsAvailable();
         }
         return 0;
 

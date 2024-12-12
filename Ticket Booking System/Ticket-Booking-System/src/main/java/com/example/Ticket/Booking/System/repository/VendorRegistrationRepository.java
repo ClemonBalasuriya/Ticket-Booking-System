@@ -14,6 +14,5 @@ public interface VendorRegistrationRepository extends JpaRepository<Vendor, Inte
 
     public Vendor findByEmailAndPassword(String email, String password);
 
-    @Query("SELECT v FROM Vendor v WHERE v.email = :email")
-    Optional<Vendor> findByEmail(@Param("email") String email);
+    Optional<Vendor> findByEmail(String email);
 }

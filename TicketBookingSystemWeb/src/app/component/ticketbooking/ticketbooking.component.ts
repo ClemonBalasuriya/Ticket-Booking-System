@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['../login/login.component.css','../config/config.component.css','./ticketbooking.component.css']
 })
 export class TicketbookingComponent implements OnInit {
-
+  isWaiting = false;
   customerInfo: any;
   ticketsAvailable: number = 0;
   retrivalRate: number = 0;
@@ -86,8 +86,8 @@ export class TicketbookingComponent implements OnInit {
       // Call the booking service to process the ticket purchase
       this.bookingService.purchaseTickets(data).subscribe(
         (response: number) => {  // response is the string from the backend
-
-          alert(`${response} tickets issued successfully.`);
+          
+          alert(response+` Confirm Tickets purchase.`);
           this.loadTicketSummary(); // Fetch updated ticket count immediately after issuing
           this.ticketCount = 0;
           
@@ -100,6 +100,9 @@ export class TicketbookingComponent implements OnInit {
 
       
     }
+  }
+  goToconfigerPage():void{
+    this._router.navigate(['']);
   }
 
 

@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 public class IssuingService {
 
-    int val =0;
 
     @Autowired
     private ConfigRepository configRepository;
@@ -43,11 +42,13 @@ public class IssuingService {
     private final int TICKET_POOL_ID = 1;
 
     @Transactional
-    public void issueTicket(Vendor vendor, int numOfTickets){
+    public int issueTicket(Vendor vendor, int numOfTickets){
 
         TicketReleasingRequest task = new TicketReleasingRequest(vendor,numOfTickets,this);
         Thread thread = new Thread(task, vendor.getEmail());
         thread.start();
+        int val = task.getNumOfTickets();
+        return val;
 
 
     }
@@ -87,7 +88,7 @@ public class IssuingService {
         return null;
     }
 
-    public  int getCountOfTicketCan(String threadName,int countIssue,Vendor vendor,IssuingService issuingService){
+    public synchronized   int getCountOfTicketCan(String threadName,int countIssue,Vendor vendor,IssuingService issuingService){
         Configuration configDetails =  issuingService.getTicketPoolConfig();
         Vendor vendorDetails = getVendorDetails(vendor);
         if(vendorDetails == null){return 0;}
@@ -156,6 +157,8 @@ public class IssuingService {
 
         }
     }
+
+
 
 
 

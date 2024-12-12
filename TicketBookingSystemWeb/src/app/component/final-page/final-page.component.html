@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-12 col-lg-11 col-xl-10">
+        <div class="card d-flex mx-auto my-5">
+          <div class="row">
+            <!-- Final Values Section -->
+            <div class="col-md-12 col-sm-12 col-xs-12 p-5">
+              <h3 class="font-weight-bold text-center">System Stopped</h3>
+              <p class="text-center">
+                The system has been successfully stopped. Below are the final values:
+              </p>
+              
+              <div class="mt-4">
+                <!-- Display Final Values in a Table -->
+                <table class="table table-bordered text-center">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Metric</th>
+                      <th>Final Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Total Number of Tickets</td>
+                      <td>{{ totTickets }}</td>
+                    </tr>
+                    <tr>
+                      <td>Tickets Released</td>
+                      <td>{{ ticketsReleased }}</td>
+                    </tr>
+                    <tr>
+                      <td>Available Tickets</td>
+                      <td>{{ ticketsAvailable }}</td>
+                    </tr>
+                    <tr>
+                      <td>Customer Retrieval Rate</td>
+                      <td>{{ customer_retrieval_rate }}</td>
+                    </tr>
+                    <tr>
+                      <td>Vendor Release Rate</td>
+                      <td>{{ vendor_release_rate }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+  
+              <!-- Navigation Button -->
+              <div class="form-group text-center mt-4">
+                <button type="button" class="btn btn-primary" (click)="navigateToHome()">
+                  Return to Home
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

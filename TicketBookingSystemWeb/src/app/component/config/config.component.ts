@@ -115,6 +115,7 @@ export class ConfigComponent implements OnInit {
   stopSystem(): void {
     this.systemRunning = false;
     console.log('System stopped.');
+    this._router.navigate(['stop']);
   }
 
   // Validate inputs

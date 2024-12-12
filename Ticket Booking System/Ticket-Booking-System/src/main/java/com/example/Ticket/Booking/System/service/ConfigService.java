@@ -31,7 +31,8 @@ public class ConfigService {
         return configRepository.save(configuration);
     }
 
-    public Configuration readConfigDataBase(){
+    // Method to get configuration values by ID
+    public synchronized Configuration readConfigDataBase(){
         return configRepository.findById(1)
                 .orElseThrow(() -> new RuntimeException("Configuration not found with ID: " + 1));
 

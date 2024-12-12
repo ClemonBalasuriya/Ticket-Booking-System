@@ -28,9 +28,9 @@ public class TicketBookingRequest implements Runnable {
             }
             int updatedTicketsPurchase =bookingService.setTicketPollConfig(numOfTicketCan);
 
-            System.out.println(updatedTicketsPurchase + " tickets released.");
+            System.out.println(updatedTicketsPurchase + " tickets more available.");
 
-            bookingService.setVal(updatedTicketsPurchase); // Set latest count
+            //bookingService.setVal(numOfTicketCan); // Set latest count
 
         } catch (Exception e) {
             // Log the exception and notify Angular

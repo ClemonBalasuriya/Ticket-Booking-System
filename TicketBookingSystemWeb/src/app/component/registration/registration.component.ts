@@ -15,7 +15,6 @@ import { NgIf } from '@angular/common';
 })
 export class RegistrationComponent {
   constructor(private _service: LoginService, private _router: Router) {}
-
   customer = new Customer();
   vendor = new Vendor();
   registrationError='';
@@ -43,7 +42,7 @@ export class RegistrationComponent {
     this._service.registerCustomer(this.customer).subscribe(
       (response) => {
         console.log('Customer registered:', response);
-        this._router.navigate(['']);  // Navigate to the login page on success
+        this._router.navigate(['login']);  // Navigate to the login page on success
       },
       (error) => {
         console.error('Registration failed:', error);
@@ -53,8 +52,12 @@ export class RegistrationComponent {
   }
   // Else for Staff, implement the logic (if needed)
   else {
+    this.vendor.username = this.user.username;
+    this.vendor.email = this.user.email;
+    this.vendor.phone = this.user.phone;
+    this.vendor.password = this.user.password;
 
-    this._service.registerVendor(this.customer).subscribe(
+    this._service.registerVendor(this.vendor).subscribe(
       (response) => {
         console.log('Staff registered:', response);
         this._router.navigate(['login']);  // Navigate to the login page on success
@@ -78,7 +81,7 @@ export class RegistrationComponent {
 
   // Navigate to login
   goToLogin(){
-    this._router.navigate(['']);
+    this._router.navigate(['login']);
   }
 
   //clear registrationError

@@ -89,7 +89,7 @@ export class TicketissuingComponent implements OnInit{
         (response: number) => {
           
           
-          alert(` tickets issued successfully.`);
+          alert(response+` Confirm tickets issued.`);
           this.loadTicketSummary(); // Fetch updated ticket count immediately after issuing
           this.ticketCount = 0;
 
@@ -104,6 +104,9 @@ export class TicketissuingComponent implements OnInit{
 
     }
     
+  }
+  goToconfigerPage():void{
+    this._router.navigate(['']);
   }
 
 

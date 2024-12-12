@@ -21,12 +21,13 @@ public class VendorRegistrationController {
     @CrossOrigin(origins = "http://localhost:4200")
     public Vendor registerVendor(@RequestBody Vendor vendor) throws Exception {
         String tempEmail = vendor.getEmail();
+
         if (tempEmail != null && !"".equals(tempEmail)) {
             Optional<Vendor> vendorOb = vendorRegistrationService.fetchVendorByEmail(tempEmail);
-            Vendor vendorObj =vendorOb.get();
-            if (vendorObj != null) {
+            if (vendorOb.isPresent()) {
                 throw new Exception("Vendor with " + tempEmail + " already exists.");
             }
+
         }
         Vendor vendorObj = null;
         vendorObj = vendorRegistrationService.saveVendor(vendor);
